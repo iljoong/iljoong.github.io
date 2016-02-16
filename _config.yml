@@ -11,7 +11,7 @@ email: iljoong@outlook.com
 description: > # this means to ignore newlines until "baseurl:"
  Blog about Cloud, Modern App Development and Trends
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://yourdomain.com" # the base hostname & protocol for your site
+url: "http://iljoong.github.io/" # the base hostname & protocol for your site
 twitter_username: iljoongk
 github_username:  iljoong
 
