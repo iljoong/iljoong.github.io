@@ -11,7 +11,7 @@ Github에 첫 소스코드인 SQLPerMon를 공유했습니다.
 
 [https://github.com/iljoong/sqlperfmon](https://github.com/iljoong/sqlperfmon)
 
-SQLPerfMon은 대쉬보드 앱으로 Azure SQL Database의 성능정보를 보여주며, 3개의 대쉬보드로 구성되어 있으며, 다음과 같습니다.
+SQLPerfMon은 대쉬보드 앱으로 Azure SQL Database의 성능정보를 보여주며, 다음과 같이 3개의 대쉬보드로 구성되어 있습니다.
 
 * _Stat_: 최근 1시간의 성능지표
 * _Perf_: 일일 성능지표
