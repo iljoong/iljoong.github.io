@@ -41,7 +41,7 @@ Invoke-RestMethod -Headers @{"Authorization"=$api_key; "Content-Type"="applicati
 {% highlight js linenos %}
 router.post('/push/wns', function(req, res, next) {
   
-   var msessage = ‘hello’;
+   var msessage = 'hello';
    var payload = '<toast><visual><binding template="ToastText01"><text id="1">' + message + '</text></binding></visual></toast>';
 
    req.azureMobile.push.wns.send(null, payload, 'wns/toast', function(error, response) {
