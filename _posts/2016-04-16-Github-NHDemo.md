@@ -7,9 +7,9 @@ categories: project
 
 ## Azure NH
 
-최근 NH 사용에 어려움을 호소하거나 또는 오해(?)를 하고 있는 분들을 보았습니다. 다시 말하면, NH SaaS 형태의 푸쉬 서비스로 생각하신 분들에게는 사용법이 꽤 어렵게 느껴질 수 있고, 문서가 좀 어렵다 보니 일부 플랫폼(예: [Cordova](http://cordova.apache.org/))은 지원하지 않는다고 생각하시는 분들이 있습니다.
+최근 NH 사용에 어려움을 호소하거나 또는 오해(?)를 하고 있는 분들을 보았습니다. 다시 말하면, NH를 SaaS 형태의 푸쉬 서비스로 생각하신 분들에게는 사용법이 꽤 어렵게 느껴질 수 있고, 문서가 좀 어렵다 보니 일부 플랫폼(예: [Cordova](http://cordova.apache.org/))은 지원하지 않는다고 생각하시는 분들이 있습니다.
 
-사실 시장이 이미 많은 SaaS 형태의 서비스가 있어 그렇게 생각할 수도 있지만, NH는 좀 차별화된 강력한 PaaS 서비스로 백앤드 서비스를 구축 또는 연계해서 사용할 수 있습니다. 이번 블로그는 [**Azure Notification Hub(NH)**](https://azure.microsoft.com/services/notification-hubs/) 의 백앤드 서비스를 구현하는 방법에 대해 이야기 해보고자 합니다.
+사실 시장에는 이미 많은 SaaS 형태의 서비스가 있어 그렇게 생각할 수도 있지만, NH는 좀 차별화된 강력한 PaaS 서비스로 백앤드 서비스를 구축 또는 연계해서 사용할 수 있습니다. 이번 블로그는 [**Azure Notification Hub(NH)**](https://azure.microsoft.com/services/notification-hubs/) 의 백앤드 서비스를 구현하는 방법에 대해 이야기 해보고자 합니다.
 
 ## 푸쉬 서비스 매커니즘
 
