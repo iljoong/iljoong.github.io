@@ -5,7 +5,7 @@ date:   2016-02-19 09:00:00 +0000
 categories: project
 ---
 
-#First Github
+## First Github
 
 Github에 첫 소스코드인 SQLPerMon를 공유했습니다.
 
@@ -27,6 +27,8 @@ Azure SQL Database의 성능 관련해서는 [https://azure.microsoft.com/en-us/
 대쉬보드 웹인 SQLPerMon은 Azure의 Web App, API App 및 Automation을 활용합니다.
 _Stat_ 데이터를 제외하고, _Perf_ 와 _Mon_ 데이터는 Azure Automation의 스케쥴에 의해서 매일 실행되고 Database에 저장됩니다.
 성능지표 데이터는 Database에서 직접 가져오지 않고, API app을 통해서 가져옵니다. API app은 Azure AD로 보호되어 인증된 사용자만 데이터를 접근할 수 있습니다.
+
+## 아키텍처
 
 자세한 구성은 SQLPerMon의 아키텍처 구성도를 참고하시기 바랍니다.
 
