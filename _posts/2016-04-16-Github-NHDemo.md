@@ -127,11 +127,11 @@ router.post('/tag/', function(req, res, next) {
 });
 {% endhighlight %}
 
-템플릿 및 태그는 물론 Telemetry도 유용한 기능 중 하나입니다. Telemetry의 기능 구현을 포함한 제세한 구현 방법은 Github에 공개한 Azure Notification Demo App 소스 코드를 참조하시기 바랍니다.
+템플릿 및 태그는 물론 Telemetry도 유용한 기능 중 하나입니다. Telemetry의 기능 구현을 포함한 자세한 구현 방법은 Github에 공개한 Azure Notification Demo App 소스 코드를 참조하시기 바랍니다.
 
 [https://github.com/iljoong/nhubdemo](https://github.com/iljoong/nhubdemo)
 
-Demo 앱의 동작은 아래를 클릭하여 확인하세요
+Demo App의 동작은 아래를 클릭하여 확인하세요
 [![Watch NHubDemo](https://img.youtube.com/vi/one4LxEUAQU/0.jpg)](https://youtu.be/one4LxEUAQU)
 
 
