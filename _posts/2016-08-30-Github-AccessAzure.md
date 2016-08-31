@@ -180,7 +180,7 @@ router.get('/login', function(req, res, next) {
   
 });
 
-router.get('/oauth2/callback', function(req, res, next) {
+router.get('/auth/callback', function(req, res, next) {
 
   var config = {
       uri: 'https://login.windows.net/' + _config.tenant_id + '/oauth2/token',
