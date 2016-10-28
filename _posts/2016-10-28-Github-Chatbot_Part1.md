@@ -68,6 +68,8 @@ Billing API의 경우 node.js의 한계(?)로 별도의 .net core API app을 만
 
 ![Azmanbot Architecture](/images/azmanbot_arch.png)
 
+> **노트**: 등록 페이지(Usage API)에서 Bot API를 Ajax로 호출하도록 구현되어 있어, Bot API가 호스팅되는 App에서는 CORS 설정(Usage API의 URL)을 해줘야 함 
+
 Bot Framework로 챗봇을 구현하고 퍼블리쉬 하면, 기본적으로 Skype와 자동으로 채널 구성을 해주지만, Slack, Facebook Messenger와 같은 챗서비스는
 수동으로 채널 구성을 해야 합니다. 채널 구성은 Azure 배포를 포함하여 아래의 링크를 참조하시기 바랍니다.
 
@@ -92,14 +94,14 @@ Tsmatz 블로그에 자세한 표현 방법이 소개되어 있으니 참고하�
 
 [https://blogs.msdn.microsoft.com/tsmatsuz/2016/08/31/microsoft-bot-framework-messages-howto-image-html-card-button-etc/](https://blogs.msdn.microsoft.com/tsmatsuz/2016/08/31/microsoft-bot-framework-messages-howto-image-html-card-button-etc/)
 
-**주의:** Skype의 경우 html 태그를 인식하기 때문에 “<>”를 테스트 메시지로 사용하는 경우 내부 오류가 발생함
+> **주의:** Skype의 경우 html 태그를 인식하기 때문에 “<>”를 테스트 메시지로 사용하는 경우 내부 오류가 발생함
 
 ### User State
 
 특정 구독의 Azure 리소스들을 제어하려면, 사용자의 구독 정보(권한, 스케쥴 추가)를 저장 및 유지해야 합니다. 사용자의 세션정보는 `session.userData` 객체를 
 통해서 관리할 수 있지만 서비스의 좀더 persistent한 정보 유지를 위해서 Database와 같은 서비스를 사용할 수 있습니다. 그렇지만, 좀더 가볍게 구현하기 위해서 파일시스템을 
 사용하였습니다. 상태 유지 데이터는 Azure App Service 기준으로 `D:\home\site\azmanbotglobal.json` 파일로 저장되며, Bot API App이 업데이트 또는 리부팅 되어도 사용자 정보가 유지됩니다.
-모든 상태관련 기능은 [`azstate.js`]()에서 처리 합니다.
+모든 상태관련 기능은 [`azstate.js`](https://github.com/iljoong/azmanbot/blob/master/botapi/azstate.js)에서 처리 합니다.
 
 원하는 기능을 구현되었으나, `session.userData`를 좀더 활용하여 빌트인 기능으로 구현하는 방법이 필요해 보입니다.
 

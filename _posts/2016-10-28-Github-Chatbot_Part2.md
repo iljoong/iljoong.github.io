@@ -170,7 +170,6 @@ if (args.entities[0]) {
 
 [https://www.luis.ai/help#PreBuiltEntities](https://www.luis.ai/help#PreBuiltEntities)
 
-
 ## Conclusion
 
 AzmanBot 샘플 앱을 통해서 Bot Framework를 이용한 챗봇 서비스 구현과 LUIS를 이용한 자연어 처리 구현 방법에 대해서 소개 드렸습니다. 저도 실력이 부족하고
