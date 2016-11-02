@@ -24,7 +24,7 @@ categories: project
 
 ## LUIS
 
-자연어 처리는 어려운 구현이지만, Azure의 [Cognitive Service](https://azure.microsoft.com/ko-kr/services/cognitive-services/)의 하나인 
+자연어 처리는 일반 개발자에게는 구현이 어려운 항목이지만, Azure의 [Cognitive Service](https://azure.microsoft.com/ko-kr/services/cognitive-services/)의 하나인 
 LUIS(Language Understanding Intelligence Service)를 이용하면 정말로 손쉽게 구현이 가능합니다. LUIS의 웹도구와 API를 통해서 어려운 
 자연어 처리를 마치 엑셀로 복잡한 회계를 관리할 수 있는 것처럼 도구화해 주었습니다. 
 아래의 10분짜리 동영상만 시청하면 바로 즉시 LUIS를 기본 기능을 사용할 수 있습니다.
@@ -38,7 +38,7 @@ LUIS는 Cognitive Computing의 강자로 익숙한 IBM의 Watson의 유사 서�
 
 ## Modeling with LUIS
 
-LUIS 사용을 간단히 설명을 하면, 애플리케이션 도메인 또는 컨텍스트에 해당하는 대화를 먼저 모델링(학습) 시킨 후 이를 API로 퍼블리슁 합니다. 그리고, 
+LUIS 사용을 간단히 설명을 하면, 애플리케이션 도메인 또는 컨텍스트에 해당하는 대화를 먼저 모델링(학습) 시킨 후 이를 API로 퍼블리쉬 합니다. 그리고, 
 이 API를 소비하는 애플리케이션을 구현합니다. 
 
 모델링은 아래와 같이 수행합니다.
@@ -63,7 +63,7 @@ LUIS의 자세한 내용은 [LUIS Documentation](https://www.microsoft.com/cogni
 
 그리고, Github에 공개한 본 [샘플앱의 LUIS app](https://github.com/iljoong/azmanbot/tree/luis/botapi/luisapp)을 참조하세요.
 
-## Integration LUIS into App
+## Integrating LUIS into App
 
 Node.js기반 챗봇 앱의 LUIS 통합은 아래의 문서링크를 참조하시기 바랍니다.
 

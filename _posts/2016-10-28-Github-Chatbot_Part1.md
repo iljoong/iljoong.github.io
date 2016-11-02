@@ -136,7 +136,7 @@ if (schedule.cmd == "start") {
 Bot framework는 Node.js로 손쉽게 개발 및 배포가 가능한데 아쉬운 부분이 있습니다. 예를 들어, 이번 달 일별 비용 또는 각 서비스(미터)별 비용을 확인하기 위해서는 
 Azure의 [Billing API](https://msdn.microsoft.com/en-us/library/azure/mt218998.aspx)에서 제공되는 두개의 API (Pricing API와 Usage API) 
 호출 결과 값을 조인하고 그룹핑해야 합니다. Node.js로 이를 구현하기는 좀 까다롭습니다. 물론 Database에 결과값을 저장하고 필요할 때 쿼리를 하면 되지만 
-이를 위해 별도의 서비스를 쓴다는 것은 왠지 비용낭비 같아 다른 방법을 강구 했습니다.
+이를 위해 별도의 서비스를 쓴다는 것은 왠지 비용낭비 같아 다른 방법을 강구했습니다.
 
 그래서 .net의 LINQ를 사용하게 되었습니다. LINQ는 SQL 쿼리처럼 유사하게 조인 및 그룹핑 등의 복잡한 쿼리를 실행할 수 있습니다. 또한, 
 Azure App Service(같은 App Service Plan 사용)는 1개의 API 앱으로 모든 기능을 구현하지 않고 2개 이상의 API 앱으로 구현하여도 비용이 동일하기 때문에 
@@ -165,7 +165,7 @@ var query = from x in (from p in pricelist
 
 사용자 정보는 파일 시스템으로 저장되며 서비스 업데이트 및 리부트가 되어도 계속 유지됩니다.
 
-다음에는 LUIS를 이용하여 Azmanbot 서비스에 자연어처리 기능을 추가하는 방법에 대해서 소개하도록 하겠습니다.
+다음에는 LUIS를 이용하여 AzmanBot 서비스에 자연어처리 기능을 추가하는 방법에 대해서 소개하도록 하겠습니다.
 
 
 /iljoong/
