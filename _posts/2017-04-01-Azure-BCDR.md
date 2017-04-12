@@ -9,7 +9,7 @@ categories: azure
 
 퍼블릭 클라우드를 사용하면 장애 걱정도 없고 BCDR(Buisness Continouity & Disaster Recovery)도 필요 없다고 오해하는 분들을 볼 경우가 종종 있습니다. 퍼블릭 클라우드의 데이터센터도 따지고 보면 일반 기업의 데이터센터와 사실 크게 다르지 않습니다. 동일한 HW/SW 기술스택을 사용하고 있고, 단지 차이라면 다양한 경험의 노하우와 높은 자동화 정도 일 것입니다.
 
-가장 안정적이라고 믿고 있던 AWS도 최근 큰 [장애](http://www.ddaily.co.kr/cloud/news/article.html?no=153365)가 발생했습니다. 많은 온라인 기업들이 이 장애로 인해 서비스가 접속이 되지 않는 상태가 꽤 오랜 시간 지속되었으나, Amazon과 Netflix는 이 장애와 무관하게 서비스를 원할 하게 제공되었다고 합니다.
+가장 안정적이라고 믿고 있던 AWS도 최근 큰 [장애](http://www.ddaily.co.kr/cloud/news/article.html?no=153365)가 발생했습니다. 많은 온라인 기업들이 이 장애로 인해 서비스가 접속이 되지 않는 상태가 꽤 오랜 시간 지속되었으나, Amazon과 Netflix는 이 장애와 무관하게 서비스가 원할 하게 제공되었다고 합니다.
 
 Amazon과 Netflix는 그럼 어떻게 서비스를 원할 하게 제공할 수 있었을까요? Amazon은 잘 모르지만 Netflix는 자사의 서비스에 대해서 고가용 아키텍처 및 멀티 리전 운영뿐만 아니라 다양한 테스트(Chaos Monkey, Chaos Gorilla, Chaos Kong)를 통해 언제 어디서, 혹시 발생할 수 있는 장애에 항상 대비하고 있습니다. Netflix의 아키텍처는 [Slideshare](https://www.slideshare.net/aspyker/netflix-cloud-architecture-and-open-source?qid=3faf9ea1-01f0-4be2-afdf-2902e97d2d50&v=&b=&from_search=1) 등 에서 쉽게 확인할 수 있습니다. 
 
@@ -24,7 +24,7 @@ Amazon과 Netflix는 그럼 어떻게 서비스를 원할 하게 제공할 수 �
 그리고, 아키텍처 문서에 주요 가용성 고려사항이 자세히 설명되어 있으니 참고하시기 바랍니다.
 [https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/managed-web-app/multi-region-web-app](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/managed-web-app/multi-region-web-app)
 
-본 소개에서는 아키텍처 문서에 소개된 고려사항 들을 적용, Traffic Manager, Azure Storage의 RA-GRS를 활용한 BCDR을 구성하는 방법을 소개하겠습니다. 
+본 소개에서는 아키텍처 문서에 소개된 고려사항 들을 적용하는, 즉 Traffic Manager, Azure Storage의 RA-GRS를 활용한 BCDR을 구성하는 방법을 소개하겠습니다. 
 
 실질적인 소개를 위해서 간단한 웹사이트가 아닌 좀더 현실적인, 복잡한 구성의 데모 서비스(앱)을 사용했습니다. 데모 서비스는 포토 갤러리앱으로, 기본적인 기능(업로드, 썸네일 생성 등)에 추가적으로 인텔리전스 기능인 이미지 캡션(설명)을 추가하였습니다. 서비스 특성을 고려하여 SQL Database 대신 검색에 좀더 특화된 Azure Search를 활용하였습니다. (참고로, Azure Search로 페이징과 Facet을 손쉽게 구현할 수 있습니다.)
 
@@ -38,7 +38,7 @@ Amazon과 Netflix는 그럼 어떻게 서비스를 원할 하게 제공할 수 �
 
 ## DR Strategy
 
-DR 구축에 앞서 먼저 DR 전략을 고민해야 합니다. 다시 말하면, RPO(Recovery Point Object)와 RTO(Recovery Time Object)를 어떻게 설정하느냐에 따라 구축 비용과 복잡성에 달라지게 되기 때문입니다. 낮은 RPO와 RTO가 좋지만 이를 위해서는 높은 비용과 복잡한 서비스 구성이 요구될 수 있기 때문입니다. 예를 들어, Active/Active 리전 구성이 RPO/RTO 관점에서는 가장 좋지만, Stateful한 서비스(예: database)를 실시간으로 동기화하는 것이 현실적으로 불가능하고, 또한 failover 및 failback의 구현도 쉽지 않습니다.
+DR 구축에 앞서 먼저 DR 전략을 고민해야 합니다. 다시 말하면, RPO(Recovery Point Object)와 RTO(Recovery Time Object)를 어떻게 설정하느냐에 따라 구축 비용과 복잡성에 달라지게 되기 때문입니다. 낮은 RPO와 RTO가 좋지만 이를 위해서는 높은 비용과 복잡한 서비스 구성이 요구될 수 있기 때문입니다. 예를 들어, Active/Active 리전 구성이 RPO/RTO 관점에서는 가장 좋지만, Stateful한 서비스(예: database)를 실시간으로 동기화(sync)하는 것이 어렵고, 또한 failover 및 failback의 구현도 쉽지 않습니다.
 
 본 데모 서비스의 DR 전략은 Active/Active 리전이 아닌 Active/Standby 리전으로 구성하였으며, DR 순서는 다음과 같습니다.
 
@@ -82,11 +82,11 @@ BCDR을 위해서 blob 스토리지는 생성시 RA-GRS 옵션으로 생성합�
 
 ### Functions
 
-이미지는 blob 스토리지에 정상 업로드 후, 비동기적으로 여러 작업 수행할 수 있도록 큐에 작업을 추가 합니다. Azure Functions 큐에 쌓인 작업을 읽어(또는 트리거되어) 썸네일, 캡션, 검색 인덱스 추가 및 인덱스 로그를 저장합니다.
+이미지는 blob 스토리지에 정상 업로드 후, 비동기적으로 여러 작업 수행할 수 있도록 큐에 작업을 추가 합니다. Azure Functions은 큐에 쌓인 작업을 읽어(또는 트리거되어) 썸네일, 캡션, 검색 인덱스 추가 및 인덱스 로그를 저장합니다.
 
 ### Search
 
-원본 및 썸네일 이미지는 자동으로 비동기 복사가 수행되지만, Secondary search는 자동으로 동기화가 되지 않습니다. Secondary search에 인덱스를 동기화하기 위해서 Secondary search에 primary blob 스토리지를 연결하는 datasource와 indexer를 생성하고 주기적으로 (예: 15분) blob 스토리지의 추가된 로그정보를 접근하여 동기화 합니다.
+검색 인덱스(원본 이미지 및 썸네일 이미지 URL, 캡션 및 태그)는 Primary Search에 저장됩니다. 하지만, Secondary Search는 Blob 서비스와 달리 자동으로 복사가 되지 않기 때문에 추가적인 작업 요구됩니다. 앞서 Functions을 통해 생성된 log를 이용하여 Secondary search에 인덱스를 동기화 합니다. 이를 위해서 Secondary search에 primary blob 스토리지를 연결하는 datasource와 indexer를 생성하고 주기적으로 (예: 15분) blob 스토리지의 추가된 로그정보를 접근하여 동기화 합니다.
 
 ## Failover & Failback
 
