@@ -5,6 +5,8 @@ date:   2017-04-11 00:00:00 +0900
 categories: azure
 ---
 
+_updated: 2017-04-15_
+
 ## Why BCDR on Public Cloud
 
 퍼블릭 클라우드를 사용하면 장애 걱정도 없고 BCDR(Buisness Continouity & Disaster Recovery)도 필요 없다고 오해하는 분들을 볼 경우가 종종 있습니다. 퍼블릭 클라우드의 데이터센터도 따지고 보면 일반 기업의 데이터센터와 사실 크게 다르지 않습니다. 동일한 HW/SW 기술스택을 사용하고 있고, 단지 차이라면 다양한 경험의 노하우와 높은 자동화 정도 일 것입니다.
@@ -90,48 +92,60 @@ BCDR을 위해서 blob 스토리지는 생성시 RA-GRS 옵션으로 생성합�
 
 ## Failover & Failback
 
-Primary 사이트에 장애가 발생되면 TM에 의해 자동으로 Failover가 되지만 Secondary 사이트는 일단 Read-only로 동작합니다. 관리자는 Primary와 Secondary를 변경하는 failover는 수동으로 할 수 있습니다. 먼저 TM의 primary/secondary의 endpoint priority를 변경하고, Primary webapp의 `FOTOS_READONLY` 환경변수를 `"true"`로 Secondary webapp의 `FOTOS_READONLY`를 `"false"`로 변경하는 작업을 수행합니다. Failover가 이뤄지면, Secondary 사이트는 이제 업로드 및 수정이 가능해지며 실질적인 Primary 사이트의 역할을 수행합니다.
+Primary 사이트에 장애가 발생되면 TM에 의해 자동으로 Failover가 되지만 Secondary 사이트는 일단 Read-only로 동작합니다. 관리자는 Primary와 Secondary를 변경하는 failover는 수동으로 할 수 있습니다. 먼저, 아직 동기화되지 않은 Primary Search의 index log에 대해서 동기화를 수행합니다. 그리고, TM의 primary/secondary의 endpoint priority를 변경하고, Primary webapp의 `FOTOS_READONLY` 환경변수를 `"true"`로 Secondary webapp의 `FOTOS_READONLY`를 `"false"`로 변경하는 작업을 수행합니다. Failover가 이뤄지면, Secondary 사이트는 이제 업로드 및 수정이 가능해지며 실질적인 Primary 사이트의 역할을 수행합니다.
 
 Failback은 앞의 과정을 반대로 수행합니다.
 
 ### Automation
 
-Failover/Failback 작업을 수작업으로 할 수도 있으나, 스크립트를 이용하여 자동화할 수 있습니다. 아래는 azure-cli를 이용하여 구성한 failover/failback 스크립트 입니다.
+Failover/Failback 작업을 수작업으로 할 수도 있으나, 스크립트를 이용하여 자동화할 수 있습니다. 아래는 azure-cli를 이용하여 구성한 failover/failback 스크립트 입니다. 참고로, Search는 아직 azure-cli를 제공하지 않기 때문에 REST API 방식을 사용합니다.
 
 {% highlight bash %}
 #!/bin/bash
 if [ $# -eq 0 ]
 then
-        echo "drswitch.sh [failover | failback ]"
+        echo "%0 [failover | failback ]"
 else
         if [ $1 == "failover" ]
         then
-                echo "executing failover"
+            echo "executing failover"
 
-		az resource update -g <rgname> --namespace "Microsoft.Network/trafficManagerProfiles" \
-			--resource-type "azureEndpoints" --api-version 2015-04-28-preview \
-			--parent <tm name> -n <endpoint name> \
-			--set properties.priority=3 --verbose
+			curl -H "api-key: <apikey> -H "Content-Type: application/json" -v \
+				-X post https://<schname>.search.windows.net/indexers/fotos-json-indexer/run?api-version=2016-09-01
 
-		az appservice web config appsettings update -n <primary appname> -g <rgname> --settings FOTOS_READONLY=true
-		az appservice web config appsettings update -n <secondary appname> -g <rgname-dr> --settings FOTOS_READONLY=false
+			az resource update -g <rgname> --namespace "Microsoft.Network/trafficManagerProfiles" \
+				--resource-type "azureEndpoints" --api-version 2015-04-28-preview \
+				--parent <tm name> -n <endpoint name> \
+				--set properties.priority=3 --verbose
+
+			az appservice web config appsettings update -n <primary appname> -g <rgname> --settings FOTOS_READONLY=true
+			az appservice web config appsettings update -n <secondary appname> -g <rgname-dr> --settings FOTOS_READONLY=false
+
         else
-                echo "executing failback"
+        	echo "executing failback"
+			curl -H "api-key: <apikeydr> -H "Content-Type: application/json" -v \
+				-X post https://<schnamedr>.search.windows.net/indexers/fotos-json-indexer/run?api-version=2016-09-01
 
-		az resource update -g <rgname> --namespace "Microsoft.Network/trafficManagerProfiles" \
-			--resource-type "azureEndpoints" --api-version 2015-04-28-preview \
-			--parent <tm name> -n <endpoint name> \
-			--set properties.priority=1 --verbose
+			az resource update -g <rgname> --namespace "Microsoft.Network/trafficManagerProfiles" \
+				--resource-type "azureEndpoints" --api-version 2015-04-28-preview \
+				--parent <tm name> -n <endpoint name> \
+				--set properties.priority=1 --verbose
 
-		az appservice web config appsettings update -n <primary appname> -g <rgname> --settings FOTOS_READONLY=false
-		az appservice web config appsettings update -n <secondary appname> -g <rgname-dr> --settings FOTOS_READONLY=true
+			az appservice web config appsettings update -n <primary appname> -g <rgname> --settings FOTOS_READONLY=false
+			az appservice web config appsettings update -n <secondary appname> -g <rgname-dr> --settings FOTOS_READONLY=true
         fi
 fi
 {% endhighlight %}
 
-참고로, traffic-manager 설정 변경은 azure cli에 버그가 있어서, 간단한 커맨드가 있으나, workaround로 az resource update 커맨드를 사용했습니다.
+아쉽게도, traffic-manager 설정 변경은 azure cli에 버그가 있어서, 간단한 커맨드가 있으나, workaround로 az resource update 커맨드를 사용했습니다.
 
 [https://github.com/Azure/azure-cli/issues/2839](https://github.com/Azure/azure-cli/issues/2839)
+
+*update*: azure-cli 버그는 곧 수정될 예정이고, 아래와 같이 사용하면 됩니다.
+
+```
+az network traffic-manager endpoint update -g <rgname> --profile-name <tm name> --name <enpoint name> --priority 3 --type "Microsoft.Network/trafficManagerProfiles/azureEndpoints"
+```
 
 ### Demo
 
