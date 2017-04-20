@@ -5,7 +5,7 @@ date:   2017-04-11 00:00:00 +0900
 categories: azure
 ---
 
-_updated: 2017-04-15_
+_updated: 2017-04-20_
 
 ## Why BCDR on Public Cloud
 
@@ -100,7 +100,7 @@ Failback은 앞의 과정을 반대로 수행합니다.
 
 Failover/Failback 작업을 수작업으로 할 수도 있으나, 스크립트를 이용하여 자동화할 수 있습니다. 아래는 azure-cli를 이용하여 구성한 failover/failback 스크립트 입니다. 참고로, Search는 아직 azure-cli를 제공하지 않기 때문에 REST API 방식을 사용합니다.
 
-{% highlight bash %}
+```
 #!/bin/bash
 if [ $# -eq 0 ]
 then
@@ -135,7 +135,7 @@ else
 			az appservice web config appsettings update -n <secondary appname> -g <rgname-dr> --settings FOTOS_READONLY=true
         fi
 fi
-{% endhighlight %}
+```
 
 아쉽게도, traffic-manager 설정 변경은 azure cli에 버그가 있어서, 간단한 커맨드가 있으나, workaround로 az resource update 커맨드를 사용했습니다.
 
@@ -153,7 +153,7 @@ az network traffic-manager endpoint update -g <rgname> --profile-name <tm name> 
 
 [![Watch Demo](https://img.youtube.com/vi/mUw79EEWJxw/0.jpg)](https://youtu.be/mUw79EEWJxw)
 
-장애가 TM에 의해 감지되고 Failover가 적용된다고 해도, DNS의 쿼리만 변경되는 것이기 때문에 실제 사용자에게 적용되는 시점은 DNS 및 브라우저의 캐쉬의 TTL 이후 입니다. 이는 최소 5분 이상의 시간이 소요될 수 있습니다.
+장애가 TM에 의해 감지되고 Failover가 적용된다고 해도, DNS의 쿼리만 변경되는 것이기 때문에 실제 사용자에게 적용되는 시점은 DNS 및 브라우저의 캐쉬의 TTL 이후 입니다. 이는 최소 약 2분 30초 소요(TM의 장애 인식 2분, DNS TTL 30초)될 수 있습니다. 자세한 내용은 [TM Endpoint 모니터링](https://docs.microsoft.com/ko-kr/azure/traffic-manager/traffic-manager-monitoring) 참조하세요
 
 DNS 캐쉬를 삭제하는 방법은 CMD 창을 열고 아래의 커맨드를 실행 합니다.
 
@@ -167,7 +167,7 @@ DNS 캐쉬를 삭제하는 방법은 CMD 창을 열고 아래의 커맨드를 �
 
 데모 서비스를 통해서 Azure의 BCDR를 구축하는 방법을 소개했습니다. 다음에는 본 데모 서비스와 같은 복잡한 구성의 PaaS 서비스 생성을 자동화하는 방법에 대해서 소개하도록 하겠습니다.
 
-그리고, 샘플 앱소스도 곧 [github](https://github.com/iljoong)에 올리겠습니다.
+그리고, 샘플 앱소스는 [github](https://github.com/iljoong/azuresample-ifoto)에서 확인 하시기 바랍니다.
 
 /iljoong/
 
