@@ -5,7 +5,7 @@ date:   2017-04-11 00:00:00 +0900
 categories: azure
 ---
 
-_updated: 2017-04-20_
+_updated: 2017-05-11_
 
 ## Why BCDR on Public Cloud
 
@@ -110,7 +110,7 @@ else
         then
             echo "executing failover"
 
-			curl -H "api-key: <apikey> -H "Content-Type: application/json" -v \
+			curl -H "api-key: <apikey>" -H "Content-Type: application/json" -v \
 				-X post https://<schname>.search.windows.net/indexers/fotos-json-indexer/run?api-version=2016-09-01
 
 			az resource update -g <rgname> --namespace "Microsoft.Network/trafficManagerProfiles" \
@@ -123,7 +123,7 @@ else
 
         else
         	echo "executing failback"
-			curl -H "api-key: <apikeydr> -H "Content-Type: application/json" -v \
+			curl -H "api-key: <apikeydr>" -H "Content-Type: application/json" -v \
 				-X post https://<schnamedr>.search.windows.net/indexers/fotos-json-indexer/run?api-version=2016-09-01
 
 			az resource update -g <rgname> --namespace "Microsoft.Network/trafficManagerProfiles" \
@@ -144,7 +144,7 @@ fi
 *update*: azure-cli 버그는 곧 수정될 예정이고, 아래와 같이 사용하면 됩니다.
 
 ```
-az network traffic-manager endpoint update -g <rgname> --profile-name <tm name> --name <enpoint name> --priority 3 --type "Microsoft.Network/trafficManagerProfiles/azureEndpoints"
+az network traffic-manager endpoint update -g <rgname> --profile-name <tm name> --name <enpoint name> --priority 3 --type "azureEndpoints"
 ```
 
 ### Demo
