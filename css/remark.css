@@ -1,0 +1,228 @@
+@import url('https://fonts.googleapis.com/css?family=Mukta|Roboto');
+
+body {
+    font-family: 'Mukta', sans-serif;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+h3 {
+    font-size: 1.6em;
+}
+
+.inverse {
+    background: #272822;
+    color: #DBDBDB;
+    text-shadow: 0 0 20px #000000;
+}
+
+.inverse h1,
+.inverse h2 {
+    color: #f3f3f3;
+    line-height: 0.8em;
+    text-shadow: 0 0 20px #333;
+}
+
+.gray {
+    background: #555554;
+    color: #FFFFFF;
+    text-shadow: 0 0 20px #333;
+}
+
+.gray h1,
+.gray h2 {
+    color: #f3f3f3;
+    line-height: 0.8em;
+    text-shadow: 0 0 20px #333;
+}
+
+.percent150 img {
+    max-width: 150%;
+}
+
+.percent140 img {
+    max-width: 140%;
+}
+
+.percent130 img {
+    max-width: 130%;
+}
+
+.percent120 img {
+    max-width: 120%;
+}
+
+.percent110 img {
+    max-width: 110%;
+}
+
+.percent105 img {
+    max-width: 105%;
+}
+
+.percent100 img {
+    max-width: 100%;
+}
+
+.percent95 img {
+    max-width: 95%;
+}
+
+.percent90 img {
+    max-width: 90%;
+}
+
+.percent85 img {
+    max-width: 85%;
+}
+
+.percent80 img {
+    max-width: 80%;
+}
+
+.percent70 img {
+    max-width: 70%;
+}
+
+.percent60 img {
+    max-width: 60%;
+}
+
+.percent50 img {
+    max-width: 50%;
+}
+
+.percent40 img {
+    max-width: 40%;
+}
+
+.percent30 img {
+    max-width: 30%;
+}
+
+.percent20 img {
+    max-width: 20%;
+}
+
+.xsmall {
+    font-size: 0.5em;
+}
+
+.small {
+    font-size: 0.8em;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 5px;
+    border: 1px solid #505050;
+}
+
+th {
+    background-color: #00C0FA
+}
+
+.footnote {
+    position: absolute;
+    bottom: 1.5em;
+    font-size: 0.5em;
+}
+
+.red {
+    color: #fa0000;
+}
+
+.blue {
+    color: #0000fa;
+}
+
+.white {
+    color: #ffffff
+}
+
+pre {
+    border-left: 0.4em solid #d7d7d7;
+    padding: 1em !important;
+}
+
+code {
+    background: transparent !important;
+}
+
+a {
+    color: #F92672;
+    text-decoration: none;
+}
+
+.task {
+    float: right;
+    font-size: 0.9em;
+    padding-top: 0.6em;
+}
+
+.task a {
+    color: #080;
+    text-decoration: none;
+}
+
+.right {
+    float: right;
+    margin-left: 1em;
+}
+
+.left {
+    float: left;
+    margin-left: 1em;
+}
+
+.right50 img {
+    float: right;
+    margin-left: 1em;
+    width: 50%;
+    height: 50%;
+}
+
+.pushdown {
+    margin-top: 12em;
+}
+
+.remark-code {
+    font-size: 0.8em;
+    color: white;
+}
+
+pre {
+    background: #282A36;
+}
+
+h4 {
+    -webkit-margin-before: 0px;
+    -webkit-margin-after: 0px;
+} 
+
+.author {
+    bottom: 12px;
+    opacity: .5;
+    position: absolute;
+    left: 30px;
+    color: rgb(255, 255, 255);
+}
