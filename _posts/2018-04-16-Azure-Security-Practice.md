@@ -25,11 +25,11 @@ categories: azure
 
 ### 1. Firewall/NSG
 
-Virutal Network내의 방화벽 목적으로 NSG(Network Security Group)를 사용하여 Inbound/Outbound 트랙픽에 대한 Allow/Deny를 설정할 수 있습니다. Azure에서는 기본적으로 외부 Inbound에는 제한을 두고 Virtual Network 내에서는 모두 열어두는 룰 정책을 가지고 있습니다. Outbound는 기본적으로 모두 열려 있습니다.
+Virtual Network내의 방화벽 목적으로 NSG(Network Security Group)를 사용하여 Inbound/Outbound 트랙픽에 대한 Allow/Deny를 설정할 수 있습니다. Azure에서는 기본적으로 외부 Inbound에는 제한을 두고 Virtual Network 내에서는 모두 열어 두는 룰 정책을 가지고 있습니다. Outbound는 기본적으로 모두 열려 있습니다.
 
 하지만, 이런 정책은 대부분의 기업에서 선호하는 정책이 아니기 때문에 Inbound/Outbound의 모든 트랙픽을 기본적으로 막는 룰로 변경하고 하나씩 여는 정책을 선호 합니다.
 
-이렇게 설정한 경우 흔히 격는 이슈는 정상적인 통신이 안되는 경우를 경험하게 됩니다. 특히, NSG 룰에 Source IP와 Destination IP를 정확하게 입력했고 VM간의 통신은 잘되는데 Internal LB를 통하는 경우 안된다고 어려움을 호소하는 경우을 가끔 봅니다. 원인은 LB의 Health Probing이 제대로 되지 않는 경우이며 ILB를 위한 NSG rule을 추가해야 합니다. 참고로 Azure 모든 LB는 `168.63.129.16` IP 주소를 가지고 있으며 이 주소로 부터 오는 Health probing 트래픽을 열어주어야 합니다. (아쉽게도 기본 LB의 metrics가 제공되지 않아 Backendpool의 health를 쉽게 확인하기 어렵습니다. 표준 LB는 metrics가 제공되어 상태확인 가능합니다.)
+이렇게 설정한 경우 흔히 격는 이슈는 정상적인 통신이 안되는 경우를 경험하게 됩니다. 특히, NSG 룰에 Source IP와 Destination IP를 정확하게 입력했고 VM간의 통신은 잘되는데 Internal LB를 통하는 경우 안된다고 어려움을 호소하는 경우을 가끔 봅니다. 원인은 LB의 Health Probing이 제대로 되지 않는 경우이며 ILB를 위한 NSG rule을 추가해야 합니다. 참고로 Azure 모든 LB는 `168.63.129.16` IP 주소를 가지고 있으며 이 주소로부터 오는 Health probing 트래픽을 열어주어야 합니다. (아쉽게도 기본 LB의 metrics가 제공되지 않아 Backendpool의 health를 쉽게 확인하기 어렵습니다. 표준 LB는 metrics가 제공되어 상태확인 가능합니다.)
 
 | Priority | Rule Name      | Source (IP:Port)       | Destination | Action |
 |:---:|:---:|:---:|:---:|:---:|
@@ -39,7 +39,7 @@ Virutal Network내의 방화벽 목적으로 NSG(Network Security Group)를 사�
 
 세부 설정은 [Terraform으로 작성한 NSG 설정 예](https://github.com/iljoong/azure-terraform/blob/master/DOC.md#asg) 참고하시기 바랍니다.
 
-복잡한 구성에서는 IP Prefix 주소로 NSG 를을 편집하는 것이 매우 힘들 수있습니다. 이때, Tag 또는 Label 방식으로 NSG 룰을 편집할 수 있는 ASG(Application Security Group)가 있으며 최근 GA가 되었습니다. ASG를 활용하면 좀더 편리하게 NSG 룰을 편집할 수 있으며, Blog에 소개된 ASG 내용을 참조하시기 바랍니다.
+복잡한 구성에서는 IP Prefix 주소로 NSG 를을 편집하는 것이 매우 힘들 수 있습니다. 이때, Tag 또는 Label 방식으로 NSG 룰을 편집할 수 있는 ASG(Application Security Group)가 있으며 최근 GA가 되었습니다. ASG를 활용하면 좀더 편리하게 NSG 룰을 편집할 수 있으며, Blog에 소개된 ASG 내용을 참조하시기 바랍니다.
 
 [https://azure.microsoft.com/ko-kr/blog/applicationsecuritygroups/](https://azure.microsoft.com/ko-kr/blog/applicationsecuritygroups/)
 
@@ -57,7 +57,7 @@ CLI 스크립트 또는 Terraform을 이용한 App Gateway + WAF를 생성/설�
 
 [https://github.com/iljoong/azure-tf-waf](https://github.com/iljoong/azure-tf-waf)
 
-WAF 설정 시 Detection 또는 Prevention 모드를 선택할 수 있는데, 먼저 Detection 모드로 선택하고 운영한 후 Prevention 모드로 전환하는 것을 권장드립니다. WAF Monitoring은 Security Center에서 된다고 하지만 Log Analytics와 연동이 필요합니다. ApplicationGatewayFirewallLog를 Log Analytics로 수집하여 모니터링 및 Alert를 설정할 수 있습니다. 아래는 Log Analytics의 모니터링 쿼리입니다.
+WAF 설정 시 Detection 또는 Prevention 모드를 선택할 수 있는데, 먼저 Detection 모드로 선택하고 운영한 후 Prevention 모드로 전환하는 것을 권장 드립니다. WAF Monitoring은 Security Center에서 된다고 하지만 Log Analytics와 연동이 필요합니다. ApplicationGatewayFirewallLog를 Log Analytics로 수집하여 모니터링 및 Alert를 설정할 수 있습니다. 아래는 Log Analytics의 모니터링 쿼리입니다.
 
 ```
 # WAF Detection/Block 확인 쿼리
@@ -79,7 +79,7 @@ AzureDiagnostics
 | top 10 by count_
 ```
 
-현재 Azure App GW + WAF는 아직 Static Public IP를 지원하지 않습니다. IP 변경이 가능하다지만, 운영중에는 IP 변경이 거의 발생하지는 않고 App GW를 정지/시작 할 때 IP가 변경됩니다. 하지만, Azure Portal에서는 정지/시작 기능이 보이지는 않고 CLI에서만 지원합니다.
+현재 Azure App GW + WAF는 아직 Static Public IP를 지원하지 않습니다. IP 변경이 가능하다지만, 운영 중에는 IP 변경이 거의 발생하지는 않고 App GW를 정지/시작 할 때 IP가 변경됩니다. 하지만, Azure Portal에서는 정지/시작 기능이 보이지는 않고 CLI에서만 지원합니다.
 
 ```
 az network application-gateway [stop | start] -n <appgw name> -g <resource group>
@@ -87,13 +87,13 @@ az network application-gateway [stop | start] -n <appgw name> -g <resource group
 
 일부 기업에서 RFC 1918에서 정의한 영역대가 아닌 IP가 충돌나는 Private IP 주소 사용하는 경우가 간혹 있는데, 이 때 APP GW를 정지/시작 시켜 충돌나지 않는 IP로 변경할 수 있습니다. (여러 번의 시도가 필요할 수도 있음) 
 
-추가로 Web App과 같은 Multi-tenant PaaS 서비스에 WAF를 적용할 경우, DNS/IP가 외부에 직접 노출되어 있기 때문에 WAF로 부터의 트래픽만 받을 수 있도록 Web App을 설정해야 합니다. 자세한 내용은 아래를 참조하세요.
+추가로 Web App과 같은 Multi-tenant PaaS 서비스에 WAF를 적용할 경우, DNS/IP가 외부에 직접 노출되어 있기 때문에 WAF로부터의 트래픽만 받을 수 있도록 Web App을 설정해야 합니다. 자세한 내용은 아래를 참조하세요.
 
 [https://azure.microsoft.com/en-us/blog/ip-and-domain-restrictions-for-windows-azure-web-sites/](https://azure.microsoft.com/en-us/blog/ip-and-domain-restrictions-for-windows-azure-web-sites/)
 
 ### 3. Jump Box
 
-퍼블릭 클라우드의 IP 주소가 공개되어 있어 요즘은 Public IP가 외부로 노출된 VM 들은 엄청난 RDB/SSH Brute-Forace 공격을 받습니다. 이런 공격을 피하기 위해서는 외부 노출은 최소화하고 외부 접근이 필요한 웹서버와 같은 VM만을 DMZ에 위치하도록 구성합니다. 관리자 또는 운영자들은 VM에 애플리케이션을 설치한다거나 설정을 하기위한 안전한 접속 방법이 필요한데, [Bastion Host](https://en.wikipedia.org/wiki/Bastion_host) 또는 Jump Box 형태의 스페셜 VM을 두어 외부에서 모든 연결은 여기를 통해서만 접근하도록 구성 합니다.
+퍼블릭 클라우드의 IP 주소가 공개되어 있어 요즘은 Public IP가 외부로 노출된 VM 들은 엄청난 RDB/SSH Brute-Forace 공격을 받습니다. 이런 공격을 피하기 위해서는 외부 노출은 최소화하고 외부 접근이 필요한 웹서버와 같은 VM만을 DMZ에 위치하도록 구성합니다. 관리자 또는 운영자들은 VM에 애플리케이션을 설치한다 거나 설정을 하기위한 안전한 접속 방법이 필요한데, [Bastion Host](https://en.wikipedia.org/wiki/Bastion_host) 또는 Jump Box 형태의 스페셜 VM을 두어 외부에서 모든 연결은 여기를 통해서만 접근하도록 구성 합니다.
 
 Jump Box를 연결할 때 잘 알려진 포트번호(SSH 22 / RDP 3389) 대신 임이의 포트번호(예: 50022)를 사용하는 것을 권장합니다. VM에서 리스너 포트를 변경하는 것 보다는 Azure에서는 LB을 생성하고 Port-forwarding 또는 [Inbound NAT rule](https://docs.microsoft.com/en-us/cli/azure/network/lb/inbound-nat-rule?view=azure-cli-latest) 설정하여 사용할 수 있습니다. 좀더 보안을 강화하기 위해서는 지정된 시간에만 접근할 수 있도록 제한하는 Security Center의 [JIT access](https://docs.microsoft.com/ko-kr/azure/security-center/security-center-just-in-time) 기능도 고려할 수 있습니다.
 
@@ -111,7 +111,7 @@ ssh  -nNT -L <localport>:<remote ip>:<remoteport> <user>@<ssh server>
 ssh -R 52698:localhost:52698 user@<remote server>
 ```
 
-bash 터미널로 연결된 `remore server`에서 아래 커맨드를 실행하면, VSCode의 편집창이 나타며 편집이 가능해집니다.
+bash 터미널로 연결된 `remore server`에서 아래 커맨드를 실행하면, VSCode의 편집창이 나타나며 편집이 가능해집니다.
 
 ```
 rmate -p 52698 <filename>
@@ -121,9 +121,9 @@ rmate -p 52698 <filename>
 
 ### 4. Key Management & IAM
 
-애플리케이션 내에서 SQL을 접근할 경우 connection string과 같은 접근 키가 필요합니다. 또한, 클라우드 기반의 서비스를 개발하기 때문에 클라우드 기반의 다양한 서비스 리소스(Blob Stroage, Service Bus, Event Grid 등)와 연동하는 코드가 추가되고 여기에도 서비스들의 접근 키가 요구됩니다.
+애플리케이션 내에서 SQL을 접근할 경우 connection string과 같은 접근 키가 필요합니다. 또한, 클라우드 기반의 서비스를 개발하기 때문에 클라우드 기반의 다양한 서비스 리소스(Blob Storage, Service Bus, Event Grid 등)와 연동하는 코드가 추가되고 여기에도 서비스들의 접근 키가 요구됩니다.
 
-소스코드 내에 이런 접근 키를 하드코딩하는 것은 유출 가능성이 높기 때문에 Production 환경에서는 권장되지 않습니다. 중요한 사용자 Key/Secret/Certificate를 안전하게 저장하고 참조 방법으로 [Azure Key Vault](https://docs.microsoft.com/ko-kr/azure/key-vault/key-vault-whatis)를 사용합니다. 하지만, Key Vault를 통해 사용자 Key를 가겨오기 위해서는 Key Vault을 접근하는 AAD Access Token이 필요하고 Access Token을 얻기 위한 [AAD Service Principal](https://docs.microsoft.com/ko-kr/azure/azure-resource-manager/resource-group-create-service-principal-portal)의 Key가 요구되기 때문에 하드코딩을 피하려던 보안적 이슈가 다시 원점으로 돌아갑니다.
+소스코드 내에 이런 접근 키를 하드코딩하는 것은 유출 가능성이 높기 때문에 Production 환경에서는 권장되지 않습니다. 중요한 사용자 Key/Secret/Certificate를 안전하게 저장하고 참조 방법으로 [Azure Key Vault](https://docs.microsoft.com/ko-kr/azure/key-vault/key-vault-whatis)를 사용합니다. 하지만, Key Vault를 통해 사용자 Key를 가져오기 위해서는 Key Vault을 접근하는 AAD Access Token이 필요하고 Access Token을 얻기 위한 [AAD Service Principal](https://docs.microsoft.com/ko-kr/azure/azure-resource-manager/resource-group-create-service-principal-portal)의 Key가 요구되기 때문에 하드코딩을 피하려던 보안적 이슈가 다시 원점으로 돌아갑니다.
 
 이런 이슈를 보완하기 위해서 VM 등의 리소스에 IAM(Identity Access Management) 또는 RBAC(Role-Based Access Control)을 적용합니다. 아쉽게도 Azure에서는 이 부분이 좀 부족했는데, 이제는 AAD SP 방식이 아닌 [MSI(Managed Service Identity)](https://docs.microsoft.com/ko-kr/azure/active-directory/managed-service-identity/overview)를 이용하여 AAD Access Token을 손쉽게 획득할 수 있습니다.
 
