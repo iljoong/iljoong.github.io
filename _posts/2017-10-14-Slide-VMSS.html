@@ -24,6 +24,7 @@ Il Joong Kim (iljoong@outlook.com)
 1. VMSS Basic
 2. Secret Recipe
 
+.footnote[revised 2018-05-24]
 ---
 class: center, middle, gray
 
@@ -268,18 +269,18 @@ $ az vmss update-instances -n myvmss -g rgname --instance-ids "*"
 ---
 # Rolling upgrade
 
-인스턴스를 한번에 모두 업데이트하지 않고, 한개씩 업데이트 (그리고, 업데이트 후 15초 슬립)
+주의: 최신 CLI에서 아래의 커맨드가 더이상 동작하지 않음. 최신 `rolling-upgrade` sub-command 사용 권장
+
+~~인스턴스를 한번에 모두 업데이트하지 않고, 한개씩 업데이트 (그리고, 업데이트 후 15초 슬립)~~
 
 ```bash
 $ az vmss update -n myvmss -g rgname \
     --set virtualMachineProfile.storageProfile.imageReference.id=/subscriptions/.../images/cicdimagev2
-
 $ az vmss get-instance-view -n myvmss -g rgname --instance-id "*" \
     --query "[].[instanceView.platformUpdateDomain, instanceId]" -o tsv \
     | sort \
     | awk '{print "az vmss update-instances -n myvmss -g rgname --instance-ids " $2 " && sleep 15s"}' \
     | bash 
-
 ```
 
 ![Image](/images/slide-vmss-upgrade2.png)
@@ -333,13 +334,14 @@ $ az vmss list-instances -n myvmss -g rgname \
 ---
 # Rolling upgrade (Advanced)
 
-VM의 인스턴스가 100개가 될 경우 앞서 소개한 Rolling Upgrade는 시간이 많이 소요됨
-UD group을 이용하여 UD group에 포함된 인스턴스들을 순차적으로 업데이트 (즉, 20%씩 업데이트)
+주의: 최신 CLI에서 아래의 커맨드가 더이상 동작하지 않음. 최신 `rolling-upgrade` sub-command 사용 권장
+
+~~VM의 인스턴스가 100개가 될 경우 앞서 소개한 Rolling Upgrade는 시간이 많이 소요됨
+UD group을 이용하여 UD group에 포함된 인스턴스들을 순차적으로 업데이트 (즉, 20%씩 업데이트)~~
 
 ```bash
 $ az vmss update -n myvmss -g rgname \
 --set virtualMachineProfile.storageProfile.imageReference.id=/subscriptions/.../images/cicdimagev2
-
 $ az vmss get-instance-view -n myvmss -g rgname --instance-id "*" \
     --query "[].[instanceView.platformUpdateDomain, instanceId]" -o tsv \
     | sort \
@@ -348,7 +350,6 @@ $ az vmss get-instance-view -n myvmss -g rgname --instance-id "*" \
     | awk '{print "az vmss update-instances -n myvmss -g rgname --instance-ids " $2 " && sleep 15s"}' \
     | sed s/@/' '/g \
     | bash 
-
 ```
 .percent70[
 ![Image](/images/slide-vmss-upgrade4.png)
