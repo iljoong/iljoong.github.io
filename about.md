@@ -5,7 +5,7 @@ permalink: /about/
 ---
 ![pic](/images/iljoong_sm_bw.jpg)
 
-Cloud Solution Architect at Microsoft and hobby developer. As a Cloud Architecture Specialist, key responsibility with be to transform customer's legacy IT to modern Cloud architecture.
+Cloud Solution Architect at Microsoft and hobby developer, As a Cloud Architecture Specialist, key responsibility with be to transform customer's legacy IT to modern Cloud architecture. Visit my [github repository](https://github.com/iljoong) for my latest open sources.
 
 20 years’ experience in IT industry as developer, consultant, business developer and architect, and worked on several large projects across sectors including manufacturing, high-tech, telco and public sector.
 
