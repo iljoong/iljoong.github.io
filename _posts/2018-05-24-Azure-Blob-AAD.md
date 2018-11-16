@@ -64,7 +64,7 @@ blob storage의 IAM에서 접근을 하는 VM에 `Storage Blob Data Contributor`
 ```
 access_token=$(curl -H 'Metadata:true' -s 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://storage.azure.com/' | jq -r ".access_token")
 
-curl https://myblob.blob.core.windows.net/images/test/IMG_0000.JPG -H "Authorization: Bearer $access_token" -H "x-ms-version: Blob" -o IMG_0000.JPG
+curl https://myblob.blob.core.windows.net/images/test/IMG_0000.JPG -H "Authorization: Bearer $access_token" -H "x-ms-version: 2017-11-09" -o IMG_0000.JPG
 ```
 
 추가로 PUT API를 이용한 업로드 예입니다.
@@ -88,4 +88,4 @@ curl -i -X PUT https://myblob.blob.core.windows.net/images/upload/IMG_0000.JPG \
 
 AAD 방식이 앞선 방식에 비해서 많이 간결해진 것을 확인할 수 있을 것 입니다. 늦었지만 애플리케이션에서 Azure Blob Storage를 안전하고 편리하게 접근할 수 있게 되었습니다.
 
-Revised: 2018-05-25
+Revised: 2018-11-16
